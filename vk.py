@@ -3,14 +3,13 @@ import json
 import os
 from tqdm import tqdm
 
-# Введите ваши данные
-VK_USER_ID = "386047696"
-VK_TOKEN = "vk1.a.1sFZy6adNcLsnw1OzkcK5zmG_3FMJZh4Y9sWg8w_dyvXDMwn8KHKTLQG0Uqac7Wm_1JKoXuj9tg6x-MUXO-PXA0aMIVOb2JcApDW5JyFGKwoRTb1Htg9ivU5YTNtdo9UrOOfl0YvX4OniBTJ2fI3hjzcoPlVsIMaFqr6BUYl9-I7xZlwQkU-DPIFYG1JzBoM"
-YANDEX_DISK_TOKEN = "y0_AgAAAAB2csCCAADLWwAAAAEGqJdFAABeGcXIaxBBRqKrccg1977xaa9_9g"
+# Данные
+VK_USER_ID = ""
+VK_TOKEN = ""
+YANDEX_DISK_TOKEN = ""
 PHOTOS_COUNT = 5
 YANDEX_DISK_FOLDER = "vk_photos"
 
-# Функция для получения фотографий с профиля VK
 def get_vk_photos(user_id, token, count=PHOTOS_COUNT):
     url = "https://api.vk.com/method/photos.get"
     params = {
@@ -31,7 +30,7 @@ def get_vk_photos(user_id, token, count=PHOTOS_COUNT):
         print("Ошибка при получении фотографий с профиля VK:", data)
         return []
 
-# Функция для загрузки файла на Яндекс.Диск
+
 def upload_to_yandex_disk(file_url, file_name, token):
     headers = {
         "Authorization": f"OAuth {token}"
@@ -44,7 +43,7 @@ def upload_to_yandex_disk(file_url, file_name, token):
     response = requests.post(upload_url, headers=headers, params=params)
     return response.status_code == 202
 
-# Создание папки на Яндекс.Диске
+
 def create_yandex_disk_folder(token, folder_name):
     headers = {
         "Authorization": f"OAuth {token}"
@@ -56,7 +55,7 @@ def create_yandex_disk_folder(token, folder_name):
     requests.put(url, headers=headers, params=params)
 
 def main():
-    # Создаем папку на Яндекс.Диске
+  
     create_yandex_disk_folder(YANDEX_DISK_TOKEN, YANDEX_DISK_FOLDER)
 
     photos = get_vk_photos(VK_USER_ID, VK_TOKEN)
@@ -71,7 +70,6 @@ def main():
         if upload_to_yandex_disk(file_url, file_name, YANDEX_DISK_TOKEN):
             result.append({"file_name": file_name, "size": size_type})
 
-    # Сохранение информации о загруженных фотографиях в JSON-файл
     with open("photos_info.json", "w") as f:
         json.dump(result, f, indent=4)
 
